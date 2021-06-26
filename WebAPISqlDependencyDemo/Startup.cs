@@ -26,6 +26,10 @@ namespace WebAPISqlDependencyDemo
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            /* services.AddCors(options =>
+                options.AddDefaultPolicy(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod())); */
+            /* services.AddCors(options =>
+                options.AddPolicy("MyPolicy", builder => builder.WithOrigins("http://localhost:5001").AllowAnyHeader().AllowAnyMethod())); */
             services.AddControllers();
             // Register the Swagger services
             services.AddSwaggerDocument();
@@ -38,6 +42,8 @@ namespace WebAPISqlDependencyDemo
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            // app.UseCors("http://localhost:5001");
+            app.UseWebSockets();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -47,12 +53,14 @@ namespace WebAPISqlDependencyDemo
 
             app.UseHttpsRedirection();
 
+            app.UseStaticFiles();
+            
             app.UseRouting();
 
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
-            
+
             // Register the Swagger generator and the Swagger UI middlewares
             app.UseOpenApi();
             app.UseSwaggerUi3();

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script>
+    // const webSocket = new EventSource('/ws')
+    const webSocket = new WebSocket('wss://localhost:5001/ws')
+    // const webSocket = new SockJS('https://localhost:5001/ws')
+    webSocket.onopen = function() {
+        console.log('webSocket - onopen')
+    }
+    webSocket.onclose = function(event) {
+        if (event.wasClean) {
+            console.log('webSocket - onclose completed')
+        } else {
+            console.log('webSocket - onclose disconnected')
+        }
+        console.log('Code: ' + event.code + ' reason: ' + event.reason)
+    }
+    webSocket.onmessage = function (event) {
+        console.log(event.data)
+        console.log(JSON.parse(event.data))
+        // webSocket.close()
+    }
+    webSocket.onerror = function(error) {
+      console.log('webSocket - onerror: ' + error.message)
+    }
+</script>
+</body>
+</html>
